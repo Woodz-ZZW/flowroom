@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+const origin=process.env.FLOWROOM_TEST_URL||'http://localhost:5173';
+const request=(path,body,method='POST')=>fetch(origin+path,{method,headers:{'Content-Type':'application/json',Origin:origin},body:JSON.stringify(body)});
+const initial=await (await fetch(origin+'/api/flow')).json();
+assert.ok(initial.screens.length>=1);assert.ok(Number.isInteger(initial.version));
+let response=await request('/api/flow',{screens:[],version:initial.version},'PUT');assert.equal(response.status,400,'empty flow must be rejected');
+response=await request('/api/flow',{screens:initial.screens,version:-1},'PUT');assert.equal(response.status,400,'negative revision must be rejected');
+response=await request('/api/flow',{screens:initial.screens,version:0},'PUT');assert.equal(response.status,409,'stale write must be rejected');
+const after=await (await fetch(origin+'/api/flow')).json();assert.ok(after.version>=initial.version);
+response=await request('/api/generate',{brief:'short'});assert.equal(response.status,400,'brief minimum length is enforced');
+response=await request('/api/generate',{brief:'Create a friendly onboarding flow for a budgeting app.'});assert.equal(response.status,200);const generated=await response.json();assert.equal(generated.screens.length,3);assert.deepEqual(generated.screens.map(s=>s.type),['welcome','profile','preferences']);assert.equal(new Set(generated.screens.map(s=>s.id)).size,3);
+response=await request('/api/comments',{id:'invalid',screenId:'welcome',author:'Test',text:''});assert.equal(response.status,400,'empty comment must be rejected');
+response=await fetch(origin+'/api/presence',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://unrelated.example'},body:JSON.stringify({id:'test',name:'test',screenId:'welcome'})});assert.equal(response.status,403,'cross-origin writes must be rejected');
+console.log('PASS: flow read, input validation, optimistic conflict rejection, structured generation, comment validation, and origin checks.');
