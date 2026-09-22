@@ -4,7 +4,7 @@ A working onboarding editor built with React 19, TypeScript, Tailwind CSS, Radix
 
 ## Portfolio
 
-[Project summary](PORTFOLIO.md) · [Portfolio PDF](output/pdf/Woody_Zhao_Portfolio.pdf) · [Detailed case study](CASE_STUDY.md)
+[Portfolio PDF](output/pdf/Woody_Zhao_Portfolio.pdf)
 
 ## Run locally
 
@@ -51,7 +51,6 @@ Liveblocks CRDT editing, pointer streaming, verified teammate identities, granul
 - `lib/flow.ts`: shared structured definition schema and template generator.
 - `app/api/`: persistence, comments, presence and structured generation routes.
 - `db/schema.ts` / `drizzle/`: durable schema and versioned migrations.
-- `CASE_STUDY.md`: portfolio narrative, design choices and a usability study plan.
 
 ## Known limits
 
