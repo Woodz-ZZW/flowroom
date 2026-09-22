@@ -19,6 +19,8 @@ npm run dev
 
 Apply each local database migration only once. The development URL is printed in the terminal. `npx tsc --noEmit` checks TypeScript; `npm run build` creates the Cloudflare Worker and browser assets.
 
+The local database binding is configured in `vite.config.ts`. The app runs and builds without a `.openai` folder or a Sites project ID. The database ID in the Vite configuration is a local placeholder; a Cloudflare deployment needs its own database binding.
+
 ## What works
 
 - Select, add, remove and reorder welcome, profile and preferences screens. Reorder by dragging sidebar items or by using screen arrows.
